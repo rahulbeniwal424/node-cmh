@@ -15,6 +15,12 @@ exports.createCategoryValidator = [
     }),
 
   validatorResult,
+  body("name")
+  .notEmpty()
+  .withMessage("name is not allowed to be empty"),
+body("code")
+  .notEmpty()
+  .withMessage("code is not allowed to be empty"),
 ];
 
 exports.getCategoryValidator = [
@@ -24,7 +30,12 @@ exports.getCategoryValidator = [
     }
     return true;
   }),
-
+  body("code").custom((value, { req }) => {
+    if (!isValidObjectId(req.params.code)) {
+      throw new Error(`Invalid Category code format`);
+    }
+    return true;
+  }),
   validatorResult,
 ];
 
@@ -49,6 +60,12 @@ exports.deleteCategoryValidator = [
   body("id").custom((value, { req }) => {
     if (!isValidObjectId(req.params.id)) {
       throw new Error(`Invalid Category id format`);
+    }
+    return true;
+  }),
+  body("code").custom((value, { req }) => {
+    if (!isValidObjectId(req.params.code)) {
+      throw new Error(`Invalid Category code format`);
     }
     return true;
   }),

@@ -17,7 +17,7 @@ exports.signup = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    res.status(201).json({ token: createToken(user._id), data: user });
+    res.status(201).json({ token: createToken(user._id), data: user ,status:'true'});
   }
 });
 
@@ -40,5 +40,5 @@ exports.login = asyncHandler(async (req, res, next) => {
   delete user._doc.password;
 
   //  Send response to client side
-  res.status(200).json({ token, data: user });
+  res.status(200).json({ token, data: user ,status:'true'});
 });

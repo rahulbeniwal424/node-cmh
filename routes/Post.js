@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   createPost,
   updatePost,
+  Postimage,
   allPosts,
   getPost,
   deletePost,
@@ -29,10 +30,11 @@ router.post(
   requireSignIn,
   alowedTo("admin", "user"),
   isBlocked,
+  Postimage,
   createPostValidator,
   createPost
 );
-
+    
 // @desc Update Post
 // @access Protect
 router.put(

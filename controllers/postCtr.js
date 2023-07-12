@@ -3,16 +3,22 @@ const User = require("../model/User");
 const asyncHandler = require("express-async-handler");
 const apiError = require("../utils/apiError");
 const handlers = require("./handlersFactory");
+const storage = require("../config/cloudinary");
+const multer = require("multer");
+const upload = multer({ storage: storage });
 
+exports.Postimage = upload.single("image");
 // @desc Create Post
 exports.createPost = asyncHandler(async (req, res) => {
+  console.log("req",req.body);
   // Create The Post
   req.body.author = req.user._id;
   const post = await Post.create(req.body);
-
+// console.log("post",post);
   // Associate user to post
   await User.findByIdAndUpdate(
     req.user._id,
+    { $set: { image: req.file.path } },
     {
       $addToSet: { posts: post._id },
     },
@@ -26,7 +32,7 @@ exports.createPost = asyncHandler(async (req, res) => {
 exports.updatePost = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const post = await Post.findById(id);
-
+console.log("res",res);
   if (!post) {
     return next(new apiError(`No Post for this id ${id}`));
   }

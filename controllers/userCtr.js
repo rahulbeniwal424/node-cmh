@@ -35,7 +35,22 @@ exports.updateUser = asyncHandler(async (req, res) => {
 
   res.status(200).json({ data: user });
 });
+exports.makeUserAdmin = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
 
+  // Find the user by email
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return next(new apiError("User not found!", 404));
+  }
+
+  // Update the user's role to admin
+  user.isAdmin = true;
+  await user.save();
+
+  res.status(200).json({ message: "User successfully made admin" });
+});
 // @desc Update Passwoed
 exports.changeUserPassword = asyncHandler(async (req, res) => {
   const user = await User.findByIdAndUpdate(

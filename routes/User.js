@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   createUser,
   updateUser,
+  makeUserAdmin,
   allUsers,
   getUser,
   deleteUser,
@@ -62,6 +63,10 @@ router.put(
   changeUserPasswordValidator,
   changeUserPassword
 );
+// @desc Make a User Admin
+// @route POST /api/users/make-admin
+// @access Private/Admin
+router.post("/make-admin", requireSignIn, alowedTo("admin"), makeUserAdmin);
 
 // @desc Permanantly Delete An Account
 // @access Protect
