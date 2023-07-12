@@ -20,8 +20,9 @@ const authRouters = require("./routes/Auth");
 const categoryRouters = require("./routes/Category");
 const postRouters = require("./routes/Post");
 const commentRouters = require("./routes/Comment");
-
+var cors = require('cors')
 // routes middlware
+app.use(cors()) 
 app.use("/api/users", userRouters);
 app.use("/api/auth", authRouters);
 app.use("/api/categories", categoryRouters);
@@ -38,7 +39,6 @@ app.all("*", (req, res, next) => {
 
 // Global Error Handlers Middleware
 app.use(globalErrHandler);
-
 // Listen To Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

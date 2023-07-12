@@ -7,18 +7,28 @@ const storage = require("../config/cloudinary");
 const multer = require("multer");
 const upload = multer({ storage: storage });
 
-exports.Postimage = upload.single("image");
+exports.Postimage = (req, res, next) => {
+  upload.single("image")(req, res, function (err) {
+    if (err) {
+      return next(err);
+    }
+    next();
+  });
+};
 // @desc Create Post
 exports.createPost = asyncHandler(async (req, res) => {
-  console.log("req",req.body);
   // Create The Post
   req.body.author = req.user._id;
+  // Check if an image was uploaded
+  if (req.file) {
+    req.body.image = req.file.path; // Set the image path in the request body
+  }
+
   const post = await Post.create(req.body);
-// console.log("post",post);
+
   // Associate user to post
   await User.findByIdAndUpdate(
     req.user._id,
-    { $set: { image: req.file.path } },
     {
       $addToSet: { posts: post._id },
     },
@@ -27,7 +37,6 @@ exports.createPost = asyncHandler(async (req, res) => {
 
   res.status(201).send({ data: post });
 });
-
 // @desc Update Post
 exports.updatePost = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
