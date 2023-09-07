@@ -8,6 +8,7 @@ const {
   allPosts,
   getPost,
   deletePost,
+  
 } = require("../controllers/postCtr");
 
 const {
@@ -34,7 +35,7 @@ router.post(
   createPostValidator,
   createPost
 );
-    
+
 // @desc Update Post
 // @access Protect
 router.put(

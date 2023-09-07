@@ -25,6 +25,7 @@ exports.signup = asyncHandler(async (req, res) => {
 exports.login = asyncHandler(async (req, res, next) => {
   //  check if password and email in the body (validation)
   //  check if user exist & check if password is correct
+  console.log(req.body);
   const user = await User.findOne({ email: req.body.email });
 
   if (!user || !(await bcrypt.compare(req.body.password, user.password))) {

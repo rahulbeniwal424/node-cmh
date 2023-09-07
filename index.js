@@ -1,34 +1,32 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 
-//
 const apiError = require("./utils/apiError");
 const { globalErrHandler } = require("./utils/globalErrHandler");
-
 // access environment variables
 require("dotenv").config();
-
 // connect to database
 require("./config/database");
-
 // middleware
 app.use(express.json()); // pass income payload
-
 // routes
 const userRouters = require("./routes/User");
 const authRouters = require("./routes/Auth");
 const categoryRouters = require("./routes/Category");
 const postRouters = require("./routes/Post");
 const commentRouters = require("./routes/Comment");
-var cors = require('cors')
+const machine = require("./routes/Machine");
+const employeeRoutes = require("./routes/Employe");
 // routes middlware
-app.use(cors()) 
+app.use(cors());
 app.use("/api/users", userRouters);
 app.use("/api/auth", authRouters);
 app.use("/api/categories", categoryRouters);
 app.use("/api/posts", postRouters);
 app.use("/api/comments", commentRouters);
-
+app.use("/api/machines", machine);
+app.use('/employees', employeeRoutes);
 // 404 error
 app.all("*", (req, res, next) => {
   // create error

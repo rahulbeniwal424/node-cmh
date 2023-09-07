@@ -1,6 +1,6 @@
 const handle = require("./handlersFactory");
 const Category = require("./../model/Category");
-
+exports.getCategoryId = handle.createOne(Category);
 exports.createCategory = handle.createOne(Category);
 exports.updateCategory = handle.updateOne(Category, "category");
 exports.allCategories = handle.getAll(Category);

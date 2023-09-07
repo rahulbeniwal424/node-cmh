@@ -11,8 +11,8 @@ const {
   profilePhotoUpload,
   uploadProfileImage,
   whoViewMyProfile,
-  following,
-  Unfollowing,
+  // following,
+  // Unfollowing,
   block,
   unblock,
   block_admin,
@@ -105,72 +105,72 @@ router.post(
 
 // @desc Who view my profile
 // @access Protect
-router.get(
-  "/profile-viewers/:id",
-  requireSignIn,
-  alowedTo("user"),
-  whoViewMyProfileValidator,
-  whoViewMyProfile
-);
+// router.get(
+//   "/profile-viewers/:id",
+//   requireSignIn,
+//   alowedTo("user"),
+//   whoViewMyProfileValidator,
+//   whoViewMyProfile
+// );
 
 // @desc Follow User
 // @access Protect
-router.get(
-  "/following/:id",
-  requireSignIn,
-  alowedTo("user"),
-  followValidator,
-  following
-);
+// router.get(
+//   "/following/:id",
+//   requireSignIn,
+//   alowedTo("user"),
+//   followValidator,
+//   // following
+// );
 
 // @desc Unfollow User
 // @access Protect
-router.get(
-  "/unfollow/:id",
-  requireSignIn,
-  alowedTo("user"),
-  followValidator,
-  Unfollowing
-);
+// router.get(
+//   "/unfollow/:id",
+//   requireSignIn,
+//   alowedTo("user"),
+//   followValidator,
+//   // Unfollowing
+// );
 
 // @desc Block User
 // @access Protect
-router.get(
-  "/block/:id",
-  requireSignIn,
-  alowedTo("user"),
-  followValidator,
-  block
-);
+// router.get(
+//   "/block/:id",
+//   requireSignIn,
+//   alowedTo("user"),
+//   followValidator,
+//   block
+// );
 
 // @desc unblock User
 // @access Protect
-router.get(
-  "/unblock/:id",
-  requireSignIn,
-  alowedTo("user"),
-  followValidator,
-  unblock
-);
+// router.get(
+//   "/unblock/:id",
+//   requireSignIn,
+//   alowedTo("user"),
+//   followValidator,
+//   unblock
+// );
 
 // @desc admin block users
 // @access Admin
-router.get(
-  "/admin-block/:id",
-  requireSignIn,
-  alowedTo("admin"),
-  followValidator,
-  block_admin
-);
+// router.get(
+//   "/admin-block/:id",
+//   requireSignIn,
+//   alowedTo("admin"),
+//   followValidator,
+//   block_admin
+// );
 
 // @desc admin unblock users
 // @access Admin
-router.get(
-  "/admin-unblock/:id",
-  requireSignIn,
-  alowedTo("admin"),
-  followValidator,
-  unblockUser_admin
-);
+// router.get(
+//   "/admin-unblock/:id",
+//   requireSignIn,
+//   alowedTo("admin"),
+//   followValidator,
+//   unblockUser_admin
+// );
 
 module.exports = router;
