@@ -17,6 +17,7 @@ const categoryRouters = require("./routes/Category");
 const postRouters = require("./routes/Post");
 const commentRouters = require("./routes/Comment");
 const machine = require("./routes/Machine");
+const plant = require("./routes/Plant");
 const employeeRoutes = require("./routes/Employe");
 // routes middlware
 app.use(cors());
@@ -26,6 +27,7 @@ app.use("/api/categories", categoryRouters);
 app.use("/api/posts", postRouters);
 app.use("/api/comments", commentRouters);
 app.use("/api/machines", machine);
+app.use("/api/plants", plant);
 app.use('/employees', employeeRoutes);
 // 404 error
 app.all("*", (req, res, next) => {
