@@ -15,9 +15,9 @@ const isValidObjectId = require("../validMongodbObjectid");
     body("description")
       .notEmpty()
       .withMessage("description is not allowed to be empty")
-      .isLength({ min: 10 })
+      .isLength({ min: 5 })
       .withMessage(
-        "description length must be more than  10 characters long"
+        "description length must be more than  5 characters long"
       ),
 
 

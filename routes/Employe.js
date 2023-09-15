@@ -7,9 +7,11 @@ const {
     isBlocked,
   } = require("../middlwares/authMiddlwares");
 // Create an employee
-router.post('/', requireSignIn,isBlocked , alowedTo("admin", "user"),employeeController.createEmployee);
+router.post('/', requireSignIn, alowedTo("admin", "user"),employeeController.createEmployee);
 
 // Delete an employee
-router.delete('/:id',requireSignIn,isBlocked , alowedTo("admin", "user"), employeeController.deleteEmployee);
+router.delete('/:id',requireSignIn, alowedTo("admin", "user"), employeeController.deleteEmployee);
+router.put('/:id',requireSignIn, alowedTo("admin", "user"), employeeController.updateEmployee);
+router.get('/:id',requireSignIn, alowedTo("admin", "user"), employeeController.getEmployeeById);
 router.get('/',requireSignIn,isBlocked , alowedTo("admin", "user"), employeeController.getAllEmployees);
 module.exports = router;

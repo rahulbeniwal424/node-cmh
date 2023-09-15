@@ -6,7 +6,9 @@ const generateID = require('./generateID'); // Import the generateID function
 exports.createEmployee = async (req, res) => {
   try {
     console.log(req.body); // Log the request body
-    const { name,image, email, phone,designation,position,age,address,experience,specialization,achievement } = req.body;
+    const { name,image, email, phone,designation,totalexperience,language,dob,workingexperience,
+      jobprofie,nationality,specialization,techqulification,acedmicqulification,fathername,
+      marriedstatus,gender,aadharno,experience,age,address } = req.body;
     const existingEmployee = await Employee.findOne({
       $or: [{ email }, { phone }],
     });
@@ -15,11 +17,56 @@ exports.createEmployee = async (req, res) => {
       return res.status(400).json({ error: 'Employee with the same email or phone already exists' });
     }
     const id = generateID('cmh'); // Use the generateID function
-    const employee = new Employee({ name,image, email, phone,designation,position,age,address,experience,specialization,achievement,id });
+    const employee = new Employee({ name,image, email, phone,language,designation,totalexperience,dob,workingexperience,
+      jobprofie,specialization,techqulification,acedmicqulification,fathername,marriedstatus,gender,
+      aadharno,experience,age,nationality,address,id });
     await employee.save();
     res.status(201).json(employee);
   } catch (error) {
     console.error(error); // Log the error for debugging
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+exports.getEmployeeById = async (req, res) => {
+  try {
+    const idToGet = req.params.id;
+    console.log('Requested employee ID:', idToGet); // Log the requested ID
+
+    const employee = await Employee.findOne({ id: idToGet });
+
+    if (employee) {
+      res.json(employee);
+    } else {
+      console.log('Employee not found for ID:', idToGet); // Log that the employee was not found
+      res.status(404).json({ message: 'Employee not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+exports.updateEmployee = async (req, res) => {
+  try {
+    const idToUpdate = req.params.id;
+    console.log('Requested employee ID for update:', idToUpdate);
+
+    const updatedData = req.body;
+
+    const updatedEmployee = await Employee.findOneAndUpdate(
+      { id: idToUpdate },
+      { $set: updatedData },
+      { new: true }
+    );
+
+    if (updatedEmployee) {
+      res.json(updatedEmployee);
+    } else {
+      console.log('Employee not found for update:', idToUpdate);
+      res.status(404).json({ message: 'Employee not found' });
+    }
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

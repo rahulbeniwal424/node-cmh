@@ -88,33 +88,33 @@ exports.updatePost = asyncHandler(async (req, res, next) => {
 exports.allPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find().populate("author");
 
-  const simplifiedPosts = posts.map((post) => {
-    if (post.author.blocked.includes(req.user._id)) {
-      // If the author is blocked, return null to filter it out
-      return null;
-    }
+  // const simplifiedPosts = posts.map((post) => {
+  //   if (post.author.blocked.includes(req.user._id)) {
+  //     // If the author is blocked, return null to filter it out
+  //     return null;
+  //   }
 
-    // Create a simplified author object with only first name and _id
-    const simplifiedAuthor = {
-      _id: post.author._id,
-      firstname: post.author.firstname,
-    };
+  //   // Create a simplified author object with only first name and _id
+  //   const simplifiedAuthor = {
+  //     _id: post.author._id,
+  //     firstname: post.author.firstname,
+  //   };
 
-    // Create a new post object with the simplified author
-    const simplifiedPost = {
-      _id: post._id,
-      title: post.title,
-      description: post.description,
-      image: post.image,
-      comments: post.comments,
-      author: simplifiedAuthor,
-      // Add other fields you want to include in the response
-    };
+  //   // Create a new post object with the simplified author
+  //   const simplifiedPost = {
+  //     _id: post._id,
+  //     title: post.title,
+  //     description: post.description,
+  //     image: post.image,
+  //     comments: post.comments,
+  //     author: simplifiedAuthor,
+  //     // Add other fields you want to include in the response
+  //   };
 
-    return simplifiedPost;
-  }).filter((post) => post !== null); // Remove null entries (blocked authors)
+  //   return simplifiedPost;
+  // }).filter((post) => post !== null); // Remove null entries (blocked authors)
 
-  res.status(200).json({ size: simplifiedPosts.length, data: simplifiedPosts });
+  res.status(200).json({ size: posts.length, data: posts });
 });
 
 exports.getPost = asyncHandler(async (req, res, next) => {

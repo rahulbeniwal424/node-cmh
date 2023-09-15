@@ -72,7 +72,7 @@ const employeeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  nationalility: {
+  nationality: {
     type: String,
     required: true,
   },
