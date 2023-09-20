@@ -8,7 +8,7 @@ exports.createPlant = asyncHandler(async (req, res) => {
     req.body.image = req.file.path; // Set the image path in the request body
   }
   const plant = await Plant.create(req.body);
-  // console.log("res1",res);
+  console.log("res1",req.body);
   // console.log("req1",req);
   await User.findByIdAndUpdate(
     req.user._id,
