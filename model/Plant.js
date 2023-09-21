@@ -40,11 +40,6 @@ const plantSchema = new mongoose.Schema(
       required: [true, "Production till now is required"],
       trim: true,
     },
-    description: {
-      type: String,
-      required: [true, "Plant description is required"],
-      trim: true,
-    },
 
     image: {
         type: String,

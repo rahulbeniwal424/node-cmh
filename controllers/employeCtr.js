@@ -73,7 +73,7 @@ exports.updateEmployee = async (req, res) => {
 };
 exports.getAllEmployees = async (req, res) => {
   try {
-    const { designation, name, mobile, email, cmhId } = req.query;
+    const { designation, name, mobile, email, cmhId, page, pageSize } = req.query;
 
     let filter = {};
 
@@ -97,13 +97,28 @@ exports.getAllEmployees = async (req, res) => {
       filter.id = cmhId;
     }
 
-    const employees = await Employee.find(filter);
-    res.status(200).json(employees);
+    const currentPage = parseInt(page) || 1;
+    const itemsPerPage = parseInt(pageSize) || 2;
+    const skip = (currentPage - 1) * itemsPerPage;
+
+    const totalItems = await Employee.countDocuments(filter);
+
+    const employees = await Employee.find(filter)
+      .skip(skip)
+      .limit(itemsPerPage);
+
+    res.status(200).json({
+      data: employees,
+      currentPage,
+      totalPages: Math.ceil(totalItems / itemsPerPage),
+      totalItems
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 // Delete an employee
 exports.deleteEmployee = async (req, res) => {
