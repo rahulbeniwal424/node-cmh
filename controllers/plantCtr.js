@@ -58,10 +58,23 @@ exports.getPlantById = asyncHandler(async (req, res, next) => {
 });
 
 exports.allPlants = asyncHandler(async (req, res) => {
-  const plants = await Plant.find().populate("author");
-  // const plants = plant.filter((item) => {
-  //   return !item.author.blocked.includes(req.user._id);
-  // });
+  const searchTerm = req.query.searchTerm; // Get the search term from the query parameter
+
+  let filter = {}; // Initialize an empty filter object
+
+  if (searchTerm) {
+    // If a search term is provided, add conditions for filtering
+    filter = {
+      $or: [
+        { name: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on name
+        { model: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on model
+        { state: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on state
+      ],
+    };
+  }
+
+  const plants = await Plant.find(filter).populate('author');
+
   res.status(200).json({ size: plants.length, data: plants });
 });
 
