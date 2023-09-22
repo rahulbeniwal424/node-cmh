@@ -12,13 +12,6 @@ const isValidObjectId = require("../validMongodbObjectid");
       )
       .isLength({ min: 2 })
       .withMessage("name length must be at least 2 characters long"),
-    body("description")
-      .notEmpty()
-      .withMessage("description is not allowed to be empty")
-      .isLength({ min: 5 })
-      .withMessage(
-        "description length must be more than  5 characters long"
-      ),
 
 
     validatorResult,
