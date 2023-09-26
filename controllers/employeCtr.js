@@ -98,7 +98,7 @@ exports.getAllEmployees = async (req, res) => {
     }
 
     const currentPage = parseInt(page) || 1;
-    const itemsPerPage = parseInt(pageSize) || 2;
+    const itemsPerPage = parseInt(pageSize) || 10;
     const skip = (currentPage - 1) * itemsPerPage;
 
     const totalItems = await Employee.countDocuments(filter);

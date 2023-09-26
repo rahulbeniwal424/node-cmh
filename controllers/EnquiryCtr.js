@@ -2,10 +2,10 @@ const Enquiry = require('../model/Enquiry');
 
 
 exports.createEnquiry = async (req, res) => {
-  const { name, email, message, category, timePeriod, stateLocation } = req.body;
+  const { name, email,phone, message, category, timePeriod, stateLocation } = req.body;
 
   try {
-    const enquiry = await Enquiry.create({ name, email, message, category, timePeriod, stateLocation });
+    const enquiry = await Enquiry.create({ name, email,phone, message, category, timePeriod, stateLocation });
     res.json({ success: true, enquiry });
   } catch (error) {
     console.error(error);
