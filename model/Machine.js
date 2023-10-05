@@ -3,29 +3,43 @@ const mongoose = require("mongoose");
 
 const machineSchema = new mongoose.Schema(
   {
-    name: {
+    category: {
       type: String,
-      required: [true, "Machine name is required"],
+      required: [true, "category name is required"],
       trim: true,
     },
- 
-    type: {
+    model: {
       type: String,
-      required: [true, "Machine type is required"],
+      required: [true, "model name is required"],
+      trim: true,
+    },
+    myear: {
+      type: String,
+      required: [true, "Manufacture Year  is required"],
+      trim: true,
+    },
+    salevalue: {
+      type: String,
+    },
+    hirevalue: {
+      type: String,
+ 
+    },
+    state: {
+      type: String,
+      required: [true, "state is required"],
       trim: true,
     },
 
-    serialNumber: {
-      type: String,
-      // required: [true, "Serial number is required"],
-      trim: true,
-    },
+    image: {
+        type: String,
+        
+      },
     author: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: [true, "Author is required"],
     },
-   
 
 
     // Add other machine attributes as needed
