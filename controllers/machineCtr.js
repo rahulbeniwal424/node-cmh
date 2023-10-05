@@ -57,10 +57,23 @@ exports.getMachineId = asyncHandler(async (req, res, next) => {
   res.status(200).json({ data: machine });
 });
 exports.allMachines = asyncHandler(async (req, res) => {
-  const machine = await Machine.find().populate("author");
-  const machines = machine.filter((item) => {
-    return !item.author.blocked.includes(req.user._id);
-  });
+  const searchTerm = req.query.searchTerm; // Get the search term from the query parameter
+
+  let filter = {}; // Initialize an empty filter object
+
+  if (searchTerm) {
+    // If a search term is provided, add conditions for filtering
+    filter = {
+      $or: [
+        { category: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on name
+        { model: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on model
+        { state: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on state
+      ],
+    };
+  }
+
+  const machines = await Machine.find(filter).populate('author');
+
   res.status(200).json({ size: machines.length, data: machines });
 });
 exports.deleteMachine = asyncHandler(async (req, res, next) => {
