@@ -12,15 +12,15 @@ exports.createEmployee = async (req, res) => {
       marriedstatus,gender,aadharno,address } = req.body;
       const imageBuffer = Buffer.from(image, 'base64');
 
-    // Generate a unique filename for the image
-    const filename = `employee_${Date.now()}.jpg`;
-
-    // Define the file path where the image will be saved
-    const filePath = path.join(__dirname, '../images', filename);
-
-    // Write the image buffer to the file
-    fs.writeFileSync(filePath, imageBuffer);
-
+      // Generate a unique filename for the image
+      const filename = `employee_${Date.now()}.jpg`;
+  
+      // Define the file path where the image will be saved
+      const filePath = path.join(__dirname, '../images', filename);
+  
+      // Write the image buffer to the file
+      fs.writeFileSync(filePath, imageBuffer);
+  
     const existingEmployee = await Employee.findOne({
       $or: [{ email }, { phone }],
     });
