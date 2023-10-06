@@ -1,26 +1,15 @@
 
 const Employee = require('../model/Employee'); // Correct the import path
 const generateID = require('./generateID'); // Import the generateID function
-const fs = require('fs');
-const path = require('path');
+
 // Create an employee
 exports.createEmployee = async (req, res) => {
   try {
+    
     console.log(req.body); // Log the request body
     const { name,image, email, phone,designation,totalexperience,language,dob,workingexperience,
       jobprofie,nationality,specialization,techqulification,acedmicqulification,fathername,
       marriedstatus,gender,aadharno,address } = req.body;
-      const imageBuffer = Buffer.from(image, 'base64');
-
-      // Generate a unique filename for the image
-      const filename = `employee_${Date.now()}.jpg`;
-  
-      // Define the file path where the image will be saved
-      const filePath = path.join(__dirname, '../images', filename);
-  
-      // Write the image buffer to the file
-      fs.writeFileSync(filePath, imageBuffer);
-  
     const existingEmployee = await Employee.findOne({
       $or: [{ email }, { phone }],
     });
@@ -28,7 +17,7 @@ exports.createEmployee = async (req, res) => {
     if (existingEmployee) {
       return res.status(400).json({ error: 'Employee with the same email or phone already exists' });
     }
-    const id = generateID('cmh'); // Use the generateID function
+    const id = await generateID('cmh'); // Use the generateID function
     const employee = new Employee({ name,image, email, phone,language,designation,totalexperience,dob,workingexperience,
       jobprofie,specialization,techqulification,acedmicqulification,fathername,marriedstatus,gender,
       aadharno,nationality,address,id });
