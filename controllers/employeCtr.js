@@ -1,7 +1,8 @@
 
 const Employee = require('../model/Employee'); // Correct the import path
 const generateID = require('./generateID'); // Import the generateID function
-
+const fs = require('fs');
+const path = require('path');
 // Create an employee
 exports.createEmployee = async (req, res) => {
   try {
@@ -9,6 +10,17 @@ exports.createEmployee = async (req, res) => {
     const { name,image, email, phone,designation,totalexperience,language,dob,workingexperience,
       jobprofie,nationality,specialization,techqulification,acedmicqulification,fathername,
       marriedstatus,gender,aadharno,address } = req.body;
+      const imageBuffer = Buffer.from(image, 'base64');
+
+    // Generate a unique filename for the image
+    const filename = `employee_${Date.now()}.jpg`;
+
+    // Define the file path where the image will be saved
+    const filePath = path.join(__dirname, '../images', filename);
+
+    // Write the image buffer to the file
+    fs.writeFileSync(filePath, imageBuffer);
+
     const existingEmployee = await Employee.findOne({
       $or: [{ email }, { phone }],
     });
@@ -73,45 +85,27 @@ exports.updateEmployee = async (req, res) => {
 };
 exports.getAllEmployees = async (req, res) => {
   try {
-    const { designation, name, mobile, email, cmhId, page, pageSize } = req.query;
-
+    const searchTerm = req.query.searchTerm;
     let filter = {};
-
-    if (designation) {
-      filter.designation = designation;
+    if (searchTerm) {
+      // If a search term is provided, add conditions for filtering
+      filter = {
+        $or: [
+          { designation: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on name
+          { name: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on model
+          { mobile: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on state
+          { email: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on state
+          { cmhId: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on state
+          { mobile: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on state
+        ],
+      };
     }
-
-    if (name) {
-      filter.name = { $regex: new RegExp(name, 'i') };
-    }
-
-    if (mobile) {
-      filter.phone = mobile;
-    }
-
-    if (email) {
-      filter.email = { $regex: new RegExp(email, 'i') };
-    }
-
-    if (cmhId) {
-      filter.id = cmhId;
-    }
-
-    const currentPage = parseInt(page) || 1;
-    const itemsPerPage = parseInt(pageSize) || 10;
-    const skip = (currentPage - 1) * itemsPerPage;
-
-    const totalItems = await Employee.countDocuments(filter);
+  
 
     const employees = await Employee.find(filter)
-      .skip(skip)
-      .limit(itemsPerPage);
-
     res.status(200).json({
       data: employees,
-      currentPage,
-      totalPages: Math.ceil(totalItems / itemsPerPage),
-      totalItems
+      size: employees.length,
     });
   } catch (error) {
     console.error(error);

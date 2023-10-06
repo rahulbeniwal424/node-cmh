@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-
+const bodyParser = require('body-parser');
 const apiError = require("./utils/apiError");
 const { globalErrHandler } = require("./utils/globalErrHandler");
 // access environment variables
@@ -9,8 +9,9 @@ require("dotenv").config();
 // connect to database
 require("./config/database");
 // middleware
-app.use(express.json()); // pass income payload
+app.use(express.urlencoded({ extended: true })); // pass income payload
 // routes
+app.use(bodyParser.json({ limit: '1mb' })); 
 const userRouters = require("./routes/User");
 const authRouters = require("./routes/Auth");
 const categoryRouters = require("./routes/Category");
