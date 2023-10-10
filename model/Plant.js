@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 
 const plantSchema = new mongoose.Schema(
   {
+    status: {
+      type: String,
+      default: "inactive"
+    },
     name: {
       type: String,
       required: [true, "Plant name is required"],

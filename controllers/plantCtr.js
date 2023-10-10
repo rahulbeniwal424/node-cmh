@@ -77,6 +77,26 @@ exports.allPlants = asyncHandler(async (req, res) => {
 
   res.status(200).json({ size: plants.length, data: plants });
 });
+exports.activePlants = asyncHandler(async (req, res) => {
+  const searchTerm = req.query.searchTerm; // Get the search term from the query parameter
+
+  let filter = { status: 'active' }; // Filter for active plants
+
+  if (searchTerm) {
+    // If a search term is provided, add conditions for additional filtering
+    filter.$or = [
+      { name: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on name
+      { model: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on model
+      { state: { $regex: new RegExp(searchTerm, 'i') } }, // Case-insensitive search on state
+    ];
+  }
+  try {
+    const plants = await Plant.find(filter); // Assuming "Plant" is your Mongoose model
+    res.status(200).json({ size: plants.length, data: plants });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 exports.deletePlant = asyncHandler(async (req, res, next) => {
   const { id } = req.params;

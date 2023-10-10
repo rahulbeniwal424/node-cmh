@@ -10,13 +10,14 @@ const {
     createPlantValidator,
     removePlantValidator,
   } = require("../utils/validators/plantValidator");
-const { createPlant,allPlants,deletePlant, getPlantById, updatePlant } = require("../controllers/plantCtr");
+const { createPlant,allPlants,deletePlant, getPlantById, updatePlant,activePlants } = require("../controllers/plantCtr");
 
 // @desc Create Machine
 // @access Protect
 router.post("/", requireSignIn,isBlocked , alowedTo("admin", "user"),createPlantValidator,createPlant);
 router.put('/:_id',requireSignIn, alowedTo("admin", "user"),createPlantValidator,updatePlant)
 router.get("/",  allPlants);
+router.get("/activeplants", activePlants);
 router.delete(
     "/:id",
     requireSignIn,
