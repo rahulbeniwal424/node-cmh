@@ -158,25 +158,26 @@ UserSchema.pre("findOne", async function (next) {
 
     // --------- Check if the user inactive for 30 days ---------- //
 
-    const currentDate = new Date();
+    // const currentDate = new Date();
 
-    const diff = (currentDate - lastPostDate) / (1000 * 3600 * 24);
+    // const diff = (currentDate - lastPostDate) / (1000 * 3600 * 24);
 
-    if (diff > 30) {
-      UserSchema.virtual("isInactive").get(function () {
-        return true;
-      });
-      await User.findByIdAndUpdate(userId, { isBlocked: true }, { new: true });
-    } else {
-      UserSchema.virtual("isInactive").get(function () {
-        return false;
-      });
-      await User.findByIdAndUpdate(userId, { isBlocked: false }, { new: true });
-    }
+    // if (diff > 30) {
+    //   UserSchema.virtual("isInactive").get(function () {
+    //     return true;
+    //   });
+    //   await User.findByIdAndUpdate(userId, { isBlocked: true }, { new: true });
+    // } else {
+    //   UserSchema.virtual("isInactive").get(function () {
+    //     return false;
+    //   });
+    //   await User.findByIdAndUpdate(userId, { isBlocked: false }, { new: true });
+    // }
 
     // --------- Last Active Date Of A User ---------- //
 
-    const daysAgo = Math.floor(diff);
+    // const daysAgo = Math.floor(diff);
+    const daysAgo = Math.floor((new Date() - lastPostDate) / (1000 * 3600 * 24));
     UserSchema.virtual("lastActive").get(function () {
       if (daysAgo <= 0) {
         return "today";
