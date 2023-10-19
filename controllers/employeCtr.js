@@ -101,8 +101,6 @@ exports.getAllEmployees = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
-
 // Delete an employee
 exports.deleteEmployee = async (req, res) => {
   try {

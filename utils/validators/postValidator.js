@@ -7,18 +7,18 @@ const Category = require("../../model/Category");
     body("title")
       .notEmpty()
       .withMessage("title is not allowed to be empty")
-      .isLength({ max: 100 })
+      .isLength({ max: 1000 })
       .withMessage(
-        "title length must be less than or equal to 100 characters long"
+        "title length must be less than or equal to 1000 characters long"
       )
       .isLength({ min: 5 })
       .withMessage("title length must be at least 5 characters long"),
     body("description")
       .notEmpty()
       .withMessage("description is not allowed to be empty")
-      .isLength({ max: 1500 })
+      .isLength({ max: 10000 })
       .withMessage(
-        "title length must be less than or equal to 1500 characters long"
+        "title length must be less than or equal to 10000 characters long"
       ),
     body("category")
       .notEmpty()

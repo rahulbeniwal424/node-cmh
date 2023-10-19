@@ -129,6 +129,7 @@ exports.getPost = asyncHandler(async (req, res, next) => {
       new apiError(`Sorry, You Are Not Allowed to Access This Post`, 403)
     );
   }
+
   // Create a simplified author object with only first name and _id
   const simplifiedAuthor = {
     _id: post.author._id,
@@ -141,7 +142,6 @@ exports.getPost = asyncHandler(async (req, res, next) => {
     title: post.title,
     description: post.description,
     image: post.image,
-    comments: post.comments,
     author: simplifiedAuthor,
     // Add other fields you want to include in the response
   };

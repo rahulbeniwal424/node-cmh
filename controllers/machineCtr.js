@@ -1,26 +1,25 @@
 // controllers/machineController.js
-const Machine = require("../model/Machine");
+const Machine = require('../model/Machine');
 const asyncHandler = require("express-async-handler");
 const apiError = require("../utils/apiError");
 const User = require("../model/User");
+const generateMachineCode = require('./machinegenerateID');
 // @desc Create Machine
-exports.createMachine = asyncHandler(async (req, res) => {
-  req.body.author = req.user._id;
-  if (req.file) {
-    req.body.image = req.file.path; // Set the image path in the request body
+exports.createMachine = async (req, res) => {
+  try {
+    const { category, model, myear, salevalue, hirevalue, state, image } = req.body;
+
+    const id = await generateMachineCode('M');
+
+    const machine = new Machine({ id, category, model, myear, salevalue, hirevalue, state, image });
+    await machine.save();
+
+    res.status(201).send({ data: machine });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  const machine = await Machine.create(req.body);
-  // console.log("res1",res);
-  // console.log("req1",req);
-  await User.findByIdAndUpdate(
-    req.user._id,
-    {
-      $addToSet: { machines: machine._id },
-    },
-    { new: true }
-  );
-  res.status(201).send({ data: machine });
-});
+};
 exports.updateMachine = async (req, res) => {
   try {
     const idToUpdate = req.params._id;
@@ -45,18 +44,25 @@ exports.updateMachine = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-exports.getMachineId = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
+exports.getMachineId = async (req, res) => {
+  try {   
+    const idToGet = req.params.id;
+    console.log('Requested machine ID:', idToGet); // Log the requested ID
 
-  const machine = await Machine.findById(id).populate("author");
+    const machine = await Machine.findOne({ id: idToGet });
 
-  if (!machine) {
-    return next(new apiError(`No machine found for this id ${id}`, 404));
+    if (machine) {
+      res.json(machine);
+    } else {
+      console.log('machine not found for ID:', idToGet); // Log that the employee was not found
+      res.status(404).json({ message: 'machine not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-
-  res.status(200).json({ data: machine });
-});
-exports.allMachines = asyncHandler(async (req, res) => {
+};
+exports.allMachines = async (req, res) => {
   const searchTerm = req.query.searchTerm; // Get the search term from the query parameter
 
   let filter = {}; // Initialize an empty filter object
@@ -72,14 +78,14 @@ exports.allMachines = asyncHandler(async (req, res) => {
     };
   }
 
-  const machines = await Machine.find(filter).populate('author');
+  const machines = await Machine.find(filter)
 
   res.status(200).json({ size: machines.length, data: machines });
-});
-exports.deleteMachine = asyncHandler(async (req, res, next) => {
+};
+exports.deleteMachine = async (req, res, next) => {
   const { id } = req.params;
 
-  const  machine = await Machine.findById(id);
+  const machine = await Machine.findById(id);
   if (!machine) {
     return next(new apiError(`No Machine for this id ${id}`));
   }
@@ -98,5 +104,5 @@ exports.deleteMachine = asyncHandler(async (req, res, next) => {
     { new: true }
   );
 
-  res.status(204).send();
-});
+  res.status(200).json({ message: 'Machine Deleted' });;
+};

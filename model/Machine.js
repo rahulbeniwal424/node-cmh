@@ -35,20 +35,19 @@ const machineSchema = new mongoose.Schema(
         type: String,
         
       },
-    author: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: [true, "Author is required"],
-    },
-
-
+  
+    id: {
+      type: String,
+      unique: true,
+      default: Date.now(), // Provide a default value
+    }
     // Add other machine attributes as needed
 
   },
+  
   {
     timestamps: true,
   }
 );
 
-const Machine = mongoose.model("Machine", machineSchema);
-module.exports = Machine;
+module.exports = mongoose.model("Machine", machineSchema);
